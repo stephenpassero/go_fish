@@ -23,15 +23,19 @@ class Game
     end
   end
 
-  # To-Do: Add a run game and run round method. Remember to use TDD!
-  def run_round(player)
-    puts "Would you like to take a card from a player or go fish?"
+  def run_round(request)
+    # puts "Would you like to take a card from a player or go fish?"
     increment_player_turn()
+    request_obj = Request.from_json(request)
+    fisher = find_player(request_obj.fisher)
+    target = find_player(request_obj.target)
+    card_rank = request_obj.rank
+    fisher.request_card(fisher, card_rank, target)
   end
 
   def start_game()
-    deal_cards()
-    run_round(find_player(get_player_turn()))
+
+    #run_round(find_player(get_player_turn()))
   end
 
   def cards_in_deck()
@@ -40,6 +44,10 @@ class Game
 
   def get_player_turn()
     player_turn
+  end
+
+  def set_player_hand(player_num, *cards)
+    players[player_num - 1].set_hand(cards)
   end
 
   def find_player(player_num)

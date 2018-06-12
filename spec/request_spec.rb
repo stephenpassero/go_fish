@@ -1,22 +1,27 @@
 require 'rspec'
 require 'pry'
 require 'request'
+require 'json'
 
 describe "request" do
-  let(:player1) {Player.new()}
-  let(:player2) {Player.new()}
+  # let(:player1) {Player.new()}
+  # let(:player2) {Player.new()}
   let(:card) {Card.new(6, "Diamonds")}
 
   it "should have a card attribute" do
-    request = Request.new(player1, card, player2)
-    expect(request.card).to eq(card)
+    request = Request.new(1, card.rank, 2)
+    expect(request.rank).to eq(card.rank)
   end
-  it "should have a player_requesting attribute" do
-    request = Request.new(player1, card, player2)
-    expect(request.player_requesting).to eq(player1)
+
+  it "should have a fisher attribute" do
+    request = Request.new(1, card.rank, 2)
+    expect(request.fisher).to eq(1)
   end
-  it "should have a player_requesting_from attribute" do
-    request = Request.new(player1, card, player2)
-    expect(request.player_requesting_from).to eq(player2)
+
+  it "should have a target attribute" do
+    request = Request.new(1, card.rank, 2)
+    json_object = request.to_json
+    new_request = Request.from_json(json_object)
+    expect(request.fisher).to eq(1)
   end
 end

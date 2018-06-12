@@ -7,20 +7,23 @@ describe "response" do
   let(:card) {Card.new(6, "Diamonds")}
 
   it "should have a card attribute" do
-    response = Response.new(player1, card, player2, true)
-    expect(response.card).to eq(card)
+    response = Response.new(player1, card.rank, player2)
+    expect(response.rank).to eq(card.rank)
   end
-  it "should have a player_requesting attribute" do
-    response = Response.new(player1, card, player2, false)
-    expect(response.player_requesting).to eq(player1)
+  it "should have a fisher attribute" do
+    response = Response.new(player1, card.rank, player2)
+    expect(response.fisher).to eq(player1)
   end
-  it "should have a player_requesting_from attribute" do
-    response = Response.new(player1, card, player2, true)
-    expect(response.player_requesting_from).to eq(player2)
+  it "should have a target attribute" do
+    response = Response.new(player1, card.rank, player2)
+    json_object = response.to_json
+    new_response = Response.from_json(json_object)
+    expect(response.target).to eq(player2)
   end
 
-  it "should contain if the player_requesting_from has the card asked for" do
-    response = Response.new(player1, card, player2, true)
-    expect(response.contains_card).not_to eq(nil)
+  it "should contain if the target has the card asked for" do
+    card1 = Card.new(5, "Hearts")
+    response = Response.new(player1, card.rank, player2, card1)
+    expect(response.card).to eq(card1)
   end
 end

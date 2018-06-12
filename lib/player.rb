@@ -39,10 +39,13 @@ class Player
     deck.cards_left
   end
 
-  def request_card(player, card_rank)
-    card = player.card_in_hand(card_rank)
+  def request_card(player, card_rank, target)
+    card = target.card_in_hand(card_rank)
     if card
-      player.remove_card(card)
+      target.remove_card(card)
+      player.add_to_hand([card])
+      return true
     end
+    return false
   end
 end

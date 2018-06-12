@@ -1,10 +1,19 @@
 class Response
-  attr_reader(:player_requesting, :card, :player_requesting_from, :contains_card)
+  attr_reader(:fisher, :rank, :target, :card)
 
-  def initialize(player_requesting, card, player_requesting_from, contains_card)
-    @player_requesting = player_requesting
+  def initialize(fisher, rank, target, card=nil)
+    @fisher = fisher
+    @rank = rank
+    @target = target
     @card = card
-    @player_requesting_from = player_requesting_from
-    @contains_card = contains_card
+  end
+
+  def to_json
+    {'fisher' => @fisher, 'rank' => @rank, 'target' => @target, 'card' => @card}.to_json
+  end
+
+  def self.from_json(object)
+    data = JSON.load(object)
+    self.new data['fisher'], data['rank'], data['target'], data['card']
   end
 end
