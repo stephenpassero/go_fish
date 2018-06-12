@@ -23,6 +23,8 @@ class Game
     end
   end
 
+  # To-Do: Add a run game and run round method. Remember to use TDD!
+
   def get_player_turn()
     player_turn
   end
