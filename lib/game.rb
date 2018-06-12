@@ -26,7 +26,7 @@ class Game
   # To-Do: Add a run game and run round method. Remember to use TDD!
   def run_round(player)
     puts "Would you like to take a card from a player or go fish?"
-    increment_player_turn
+    increment_player_turn()
   end
 
   def start_game()
@@ -51,7 +51,11 @@ class Game
   end
 
   def increment_player_turn()
-    @player_turn += 1
+    if player_turn == players.length
+      @player_turn = 1
+    else
+      @player_turn += 1
+    end
   end
   private
   attr_reader(:players, :player_turn)
