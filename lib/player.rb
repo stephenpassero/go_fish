@@ -2,20 +2,28 @@ require_relative("./card_deck")
 require("pry")
 
 class Player
-  attr_reader(:discard_pile)
-  attr_accessor(:deck)
+  attr_reader(:discard_pile, :score, :deck)
 
   def initialize()
     @deck = CardDeck.new([]);
-    @discard_pile = []
+    @score = 0
+    @pairs = []
   end
 
   def play_top_card()
     deck.play_top_card
   end
 
+  def set_score(num)
+    @score = num
+  end
+
   def remove_card(card)
     deck.delete(card)
+  end
+
+  def set_deck(arr_of_cards)
+    @deck = CardDeck.new(arr_of_cards)
   end
 
   def add_to_hand(arr_of_cards)
@@ -32,11 +40,32 @@ class Player
   end
 
   def set_hand(*cards)
-    self.deck = CardDeck.new(cards)
+    set_deck(cards)
   end
 
   def cards_left
     deck.cards_left
+  end
+
+  # To-do: Make it right! Fix the broken encapsulation and self encapsulation
+
+  def pair_cards()
+    card_holder = []
+    deck.cards.each do |card|
+      deck.cards.each do |card1|
+        if card.rank == card1.rank
+          card_holder.push(card1)
+        end
+      end
+      if card_holder.length == 4
+        @pairs.push(card_holder)
+        @score += 1
+        card_holder.each do |card|
+          deck.cards.delete(card)
+        end
+      end
+      card_holder = []
+    end
   end
 
   def request_card(player, card_rank, target)
@@ -44,7 +73,7 @@ class Player
     if card
       target.remove_card(card)
       player.add_to_hand([card])
-      return true
+      return card
     end
     return false
   end

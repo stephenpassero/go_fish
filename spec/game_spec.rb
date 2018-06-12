@@ -3,6 +3,7 @@ require 'player'
 require 'card_deck'
 require 'game'
 require 'request'
+require 'response'
 
 describe "game" do
   it "creates a deck" do
@@ -19,26 +20,57 @@ describe "game" do
     expect(game.get_player_turn).to eq(2)
   end
 
-  it "#run_game should distribute five cards to each player" do
+  it "#run_game should be able to distribute five cards to each player" do
     # The number 4 is how many players are being created
     game = Game.new(4)
-    game.start_game()
     # Give five cards to each player. 5 x 4 = 20. A full deck, 52 cards, minus 20 cards = 32
     game.deal_cards()
     expect(game.cards_in_deck).to eq(32)
   end
 
+  let(:game) {Game.new(2)}
+  let(:player1) {game.find_player(1)}
+  let(:player2) {game.find_player(2)}
+  let(:card1) {Card.new(5, "Hearts")}
+  let(:card2) {Card.new(5, "Spades")}
+  let(:card3) {Card.new(5, "Diamonds")}
+  let(:card4) {Card.new(5, "Clubs")}
+
   it "should run a round and return a response object" do
-    game = Game.new(3)
-    player1 = game.find_player(1)
-    player2 = game.find_player(1)
-    card1 = Card.new(3, "Spades")
-    card2 = Card.new('A', "Hearts")
-    card3 = Card.new('J', "Clubs")
-    card4 = Card.new(6, "Diamonds")
     player1.set_hand(card1, card2)
     player2.set_hand(card3, card4)
-    request = Request.new(1, 3, 2).to_json
-    expect(game.run_round(request)).to eq(false)
+    player1_num = 1
+    player2_num = 2
+    card_num = 5
+    request = Request.new(player1_num, card_num, player2_num).to_json
+    expect(game.run_round(request).class).to eq(String)
+  end
+
+  it "refills the player's cards" do
+    player1.set_hand(card1, card2, card3)
+    player2.set_hand(card4)
+    player1_num = 1
+    player2_num = 2
+    card_num = 5
+    request = Request.new(player1_num, card_num, player2_num).to_json
+    game.run_round(request)
+    expect(player1.cards_left).to eq(5)
+  end
+
+  it "#run_round should check if a player has pairs" do
+    player1.set_hand(card1, card2, card3)
+    player2.set_hand(card4)
+    player1_num = 1
+    player2_num = 2
+    card_num = 5
+    request = Request.new(player1_num, card_num, player2_num).to_json
+    game.run_round(request)
+    expect(player1.score).to eq(1)
+  end
+
+  it "should be able to determine a winner" do
+    player1.set_score(3)
+    player2.set_score(5)
+    expect(game.winner()).to eq(player2)
   end
 end

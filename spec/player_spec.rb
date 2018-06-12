@@ -20,4 +20,15 @@ describe("#player") do
     expect(player2.cards_left).to eq(1)
   end
 
+  it "should be able to pair four cards" do
+    player1 = Player.new()
+    player2 = Player.new()
+    card1 = Card.new("A", "Clubs")
+    card2 = Card.new("A", "Hearts")
+    card3 = Card.new("A", "Diamonds")
+    card4 = Card.new("A", "Spades")
+    player1.set_hand(card1, card2, card3, card4)
+    player1.pair_cards()
+    expect(player1.cards_left).to eq(0)
+  end
 end
