@@ -46,10 +46,4 @@ describe("card_deck") do
       expect(deck.cards_left()).to eq(51)
     end
   end
-
-  it("can split into two decks") do
-    deck = CardDeck.new()
-    twoDecks = deck.split_in_two().to_a
-    expect(twoDecks[0].length).to eq(deck.cards_left() / 2)
-  end
 end

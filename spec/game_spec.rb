@@ -71,6 +71,14 @@ describe "game" do
   it "should be able to determine a winner" do
     player1.set_score(3)
     player2.set_score(5)
+    game.set_cards([])
+    binding.pry
     expect(game.winner()).to eq(player2)
+  end
+
+  it "shouldn't determine a winner unless there are no cards left" do
+    player1.set_score(3)
+    player2.set_score(5)
+    expect(game.winner()).to eq(nil)
   end
 end

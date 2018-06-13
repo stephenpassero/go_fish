@@ -24,6 +24,10 @@ class Game
     end
   end
 
+  def set_cards(arr_of_cards=[])
+    deck.set_cards(arr_of_cards)
+  end
+
   def run_round(request)
     increment_player_turn()
     request_obj = Request.from_json(request)
@@ -49,8 +53,10 @@ class Game
   end
 
   def refill_cards(player)
-    5.times do
-      player.add_to_hand([deck.play_top_card])
+    if deck.cards_left >= 5
+      5.times do
+        player.add_to_hand([deck.play_top_card])
+      end
     end
   end
 
@@ -59,15 +65,27 @@ class Game
   end
 
   def winner()
-    running_winner = ''
-    points = 0
-    players.each do |player|
-      if player.score > points
-        running_winner = player
-        points = player.score
+    if deck.cards_left == 0 && players_out_of_cards
+      running_winner = ''
+      points = 0
+      players.each do |player|
+        if player.score > points
+          running_winner = player
+          points = player.score
+        end
       end
     end
     running_winner
+  end
+
+  def cards_left_in_play?()
+    players_out_of_cards = true
+    player.each do |player|
+      if player.cards_left == 0
+        players_out_of_cards = false
+      end
+    end
+    players_out_of_cards
   end
 
   def set_player_hand(player_num, *cards)

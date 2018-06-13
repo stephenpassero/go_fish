@@ -29,6 +29,10 @@ class CardDeck
     end
   end
 
+  def set_cards(arr_of_cards=[])
+    cards = arr_of_cards
+  end
+
   def cards_left()
     @cards.length
   end
@@ -39,10 +43,5 @@ class CardDeck
 
   def play_top_card()
     @cards.shift()
-  end
-
-  def split_in_two()
-    # returns an array containing two equal arrays
-    @cards.each_slice(@cards.length / 2).to_a
   end
 end
