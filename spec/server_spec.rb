@@ -47,6 +47,28 @@ describe GoFishServer do
     expect {MockGoFishSocketClient.new(@server.port_number)}.to raise_error(Errno::ECONNREFUSED)
   end
 
+  it "accepts clients" do
+    @server.start
+    client1 = MockGoFishSocketClient.new(@server.port_number)
+    client1.provide_input("2")
+    @server.accept_new_client("Player 1")
+    expect(@server.pending_clients.length).to eq(1)
+    client2 = MockGoFishSocketClient.new(@server.port_number)
+    @server.accept_new_client("Player 2")
+    expect(@server.pending_clients.length).to eq(2)
+  end
+
+  it "can create a game" do
+    @server.start
+    client1 = MockGoFishSocketClient.new(@server.port_number)
+    client2 = MockGoFishSocketClient.new(@server.port_number)
+    client1.provide_input("2")
+    @server.accept_new_client("Player 1")
+    @server.accept_new_client("Player 2")
+    game = @server.create_game_if_possible()
+    expect(game.players.length).to eq(2)
+  end
+
   it "prompts the correct input to the correct players" do
     @server.start
     client1 = MockGoFishSocketClient.new(@server.port_number)

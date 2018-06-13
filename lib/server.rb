@@ -5,7 +5,7 @@ require_relative 'response'
 require_relative 'request'
 
 class GoFishServer
-
+  attr_reader(:pending_clients)
   def initialize
     @pending_clients = []
     @games_to_clients = {}
@@ -137,11 +137,15 @@ class GoFishServer
     until game.winner()
       run_round(game)
     end
+    clients = find_clients(game)
+    clients.each do |client|
+      client.puts("Game Over... Someone won, I have no idea who.")
+    end
   end
 
 
   private
-  attr_reader(:games_to_clients, :pending_clients, :server, :num_of_players)
+  attr_reader(:games_to_clients, :server, :num_of_players)
 
   def capture_output(desired_client, game=nil, delay=0.1)
     sleep(delay)
