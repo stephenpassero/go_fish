@@ -6,6 +6,6 @@ class Card
   end
 
   def to_s
-    return "#{@rank}-of-#{@suit}"
+    return "#{rank}-of-#{suit}"
   end
 end

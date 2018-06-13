@@ -20,12 +20,12 @@ class CardDeck
   end
 
   def delete(card)
-    @cards.delete(card)
+    cards.delete(card)
   end
 
   def add(cards_to_add)
     cards_to_add.each do |card|
-      @cards.push(card)
+      cards.push(card)
     end
   end
 
@@ -34,14 +34,14 @@ class CardDeck
   end
 
   def cards_left()
-    @cards.length
+    cards.length
   end
 
   def shuffle!()
-    @cards.shuffle!
+    cards.shuffle!
   end
 
   def play_top_card()
-    @cards.shift()
+    cards.shift()
   end
 end

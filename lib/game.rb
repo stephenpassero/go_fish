@@ -29,6 +29,7 @@ class Game
   end
 
   def run_round(fisher, card_rank, target)
+    increment_player_turn()
     card = fisher.request_card(fisher, card_rank, target)
     fisher.pair_cards()
     if fisher.cards_left == 0

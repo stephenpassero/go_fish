@@ -88,6 +88,6 @@ describe GoFishServer do
     expect(client1.capture_output).to include("You asked player2 for a 8")
     expect(client2.capture_output).to include("Player1 asked you for a 8")
     expect(client3.capture_output).to include("Player1 asked player2 for a 8")
-    expect(game.player_turn)
+    expect(game.player_turn).to eq(2)
   end
 end

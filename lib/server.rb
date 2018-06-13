@@ -45,9 +45,9 @@ class GoFishServer
     client = server.accept_nonblock
     pending_clients.push(client)
     if pending_clients.length == num_of_players
-      client.puts("Welcome! The the game will begin shortly. You are Player #{@pending_clients.length}")
+      client.puts("Welcome! The the game will begin shortly. You are Player #{pending_clients.length}")
     else
-      client.puts("Welcome! Waiting for other players to join... You are Player #{@pending_clients.length}")
+      client.puts("Welcome! Waiting for other players to join... You are Player #{pending_clients.length}")
       if pending_clients.length == 1
         client.puts("How many people would you like to play with?")
         client_output = ""
@@ -132,9 +132,12 @@ class GoFishServer
     game.run_round(current_player, card_rank, target_player)
   end
 
-  # def run_game(game)
-  #   game.start_game()
-  # end
+  def start_game(game)
+    game.start_game()
+    until game.winner()
+      run_round(game)
+    end
+  end
 
 
   private
