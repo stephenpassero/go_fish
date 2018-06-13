@@ -1,10 +1,10 @@
 require 'pry'
-require 'player'
-require 'card_deck'
-require 'response'
+require_relative 'player'
+require_relative 'card_deck'
+require_relative 'response'
 
 class Game
-  attr_reader(:deck, :players)
+  attr_reader(:deck, :players, :player_turn)
 
   def initialize(num_of_players)
     @players = []
@@ -28,12 +28,7 @@ class Game
     deck.set_cards(arr_of_cards)
   end
 
-  def run_round(request)
-    increment_player_turn()
-    request_obj = Request.from_json(request)
-    fisher = find_player(request_obj.fisher)
-    target = find_player(request_obj.target)
-    card_rank = request_obj.rank
+  def run_round(fisher, card_rank, target)
     card = fisher.request_card(fisher, card_rank, target)
     fisher.pair_cards()
     if fisher.cards_left == 0
@@ -41,7 +36,6 @@ class Game
     elsif target.cards_left == 0
       refill_cards(target)
     end
-    Response.new(fisher, card_rank, target, card.to_s).to_json
   end
 
   def start_game()
@@ -60,13 +54,9 @@ class Game
     end
   end
 
-  def get_player_turn()
-    player_turn
-  end
-
   def winner()
-    if deck.cards_left == 0 && players_out_of_cards
-      running_winner = ''
+    running_winner = nil
+    if deck.cards_left == 0 && cards_left_in_play? == false
       points = 0
       players.each do |player|
         if player.score > points
@@ -80,7 +70,7 @@ class Game
 
   def cards_left_in_play?()
     players_out_of_cards = true
-    player.each do |player|
+    players.each do |player|
       if player.cards_left == 0
         players_out_of_cards = false
       end
@@ -107,7 +97,4 @@ class Game
       @player_turn += 1
     end
   end
-
-  private
-  attr_reader(:players, :player_turn)
 end

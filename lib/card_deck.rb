@@ -30,7 +30,7 @@ class CardDeck
   end
 
   def set_cards(arr_of_cards=[])
-    cards = arr_of_cards
+    @cards = arr_of_cards
   end
 
   def cards_left()
