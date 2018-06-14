@@ -58,8 +58,10 @@ describe "game" do
   it "#run_round should check if a player has pairs" do
     player1.set_hand(card1, card2, card3)
     player2.set_hand(card4)
-    card_num = 5
-    game.run_round(player1, card_num, player2)
+    card_rank = 5
+    request = Request.new("Player1", card_rank, "Player2").to_json
+    game.run_round(request)
+    # Expect player1's score to be incremented by one
     expect(player1.score).to eq(1)
   end
 

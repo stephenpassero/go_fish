@@ -41,7 +41,6 @@ class GoFishServer
   end
 
   def accept_new_client(player_name = "Random Player")
-    sleep(0.1)
     client = server.accept_nonblock
     pending_clients.push(client)
     if pending_clients.length == num_of_players
@@ -106,11 +105,18 @@ class GoFishServer
   end
 
   def run_game(game)
-    until game.winner()
-      game.player_turn 
-      run_round(game)
-    end
     clients = find_clients(game)
+    until game.winner()
+      client = clients[game.player_turn - 1]
+      request = ""
+      until request != ""
+        request = capture_output(client)
+      end
+      clients.each do |client|
+        client.puts(run_round(request, game))
+      end
+    end
+    # Gets the player number, like 3 or 1
     player_num = game.players.index(game.winner())
     clients.each do |client|
       client.puts("Game Over... Player#{player_num} won!")
@@ -121,7 +127,7 @@ class GoFishServer
   private
   attr_reader(:games_to_clients, :server, :num_of_players)
 
-  def capture_output(desired_client, game=nil, delay=0.1)
+  def capture_output(desired_client, game=nil, delay=0.001)
     sleep(delay)
     output = ""
     if game

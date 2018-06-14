@@ -1,6 +1,6 @@
 require 'socket'
-require 'request'
-require 'response'
+require_relative 'request'
+require_relative 'response'
 require 'pry'
 
 
@@ -11,7 +11,7 @@ class Client
     @name = name
 rescue Errno::ECONNREFUSED
   puts "Waiting for server to arrive..."
-  sleep (3)
+  sleep(1)
   end
 
   def prompt_for_input()
@@ -48,7 +48,7 @@ rescue Errno::ECONNREFUSED
     @socket.close if @socket
   end
 
-  def capture_output(delay=0.1)
+  def capture_output(delay=0.01)
     sleep(delay)
     @output = @socket.read_nonblock(1000) # not gets which blocks
   rescue IO::WaitReadable

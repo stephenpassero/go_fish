@@ -17,7 +17,7 @@ class MockGoFishSocketClient
     @socket.puts(text)
   end
 
-  def capture_output(delay=0.1)
+  def capture_output(delay=0.01)
     sleep(delay)
     @output = @socket.read_nonblock(1000) # not gets which blocks
   rescue IO::WaitReadable
@@ -101,15 +101,18 @@ describe GoFishServer do
     client2 = MockGoFishSocketClient.new(@server.port_number)
     client3 = MockGoFishSocketClient.new(@server.port_number)
     client1.provide_input("3")
-    @server.accept_new_client("Player 1")
-    @server.accept_new_client("Player 2")
-    @server.accept_new_client("Player 3")
+    @server.accept_new_client("Player1")
+    @server.accept_new_client("Player2")
+    @server.accept_new_client("Player3")
     game = @server.create_game_if_possible
-    client1.provide_input("Ask player2 for a 8")
-    @server.run_round(game)
-    expect(client1.capture_output).to include("You asked player2 for a 8")
-    expect(client2.capture_output).to include("Player1 asked you for a 8")
-    expect(client3.capture_output).to include("Player1 asked player2 for a 8")
+    request = Request.new("Player1", 8, "Player2").to_json
+    sleep(0.01)
+    # The result of run_round should be a JSON blob
+    response = @server.run_round(request, game)
+    expect(response.class).to eq(String)
+    new_response = Response.from_json(response)
+    # The rank should be the same rank as passed in to request
+    expect(new_response.rank).to eq(8)
     expect(game.player_turn).to eq(2)
   end
 end
