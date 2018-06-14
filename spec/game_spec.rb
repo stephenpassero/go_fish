@@ -36,21 +36,22 @@ describe "game" do
   let(:card3) {Card.new(5, "Diamonds")}
   let(:card4) {Card.new(5, "Clubs")}
 
-  # it "should run a round and return a response object" do
-  #   player1.set_hand(card1, card2)
-  #   player2.set_hand(card3, card4)
-  #   player1_num = 1
-  #   player2_num = 2
-  #   card_num = 5
-  #   request = Request.new(player1_num, card_num, player2_num).to_json
-  #   expect(game.run_round(request).class).to eq(String)
-  # end
+  it "should run a round and return a json response object" do
+    player1.set_hand(card1, card2)
+    player2.set_hand(card3, card4)
+    player1_num = 1
+    player2_num = 2
+    card_num = 5
+    request = Request.new("Player1", card_num, "Player2").to_json
+    expect(game.run_round(request).class).to eq(String)
+  end
 
   it "refills the player's cards" do
     player1.set_hand(card1, card2, card3)
     player2.set_hand(card4)
     card_num = 5
-    game.run_round(player1, card_num, player2)
+    request = Request.new("Player1", card_num, "Player2").to_json
+    game.run_round(request)
     expect(player1.cards_left).to eq(5)
   end
 

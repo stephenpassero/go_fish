@@ -101,45 +101,19 @@ class GoFishServer
     game.player_cards_left(player)
   end
 
-  def run_round(game)
-    player_num = game.player_turn
-    clients = find_clients(game)
-    tell_clients_their_hand(game)
-    current_client = clients[game.player_turn - 1]
-    current_client.puts("Who would you like to ask for what?")
-    current_client.puts("Example: Ask Player3 for a 9")
-    response = ""
-    until response != ""
-      response = capture_output(current_client)
-    end
-    regex = /(player\d).*\s(\w+)$/
-    matches = response.match(regex)
-    target = matches[1]
-    # get the actual TCPSocket of the target player
-    target_client = clients[target[-1].to_i - 1]
-    card_rank = matches[2]
-    clients.each do |client|
-      if client == current_client
-        client.puts "You asked #{target} for a #{card_rank}"
-      elsif client == target_client
-        client.puts "Player#{player_num} asked you for a #{card_rank}"
-      else
-        client.puts "Player#{player_num} asked #{target} for a #{card_rank}"
-      end
-    end
-    current_player = game.find_player(player_num)
-    target_player = game.find_player(target[-1].to_i)
-    game.run_round(current_player, card_rank, target_player)
+  def run_round(request, game)
+    return game.run_round(request)
   end
 
-  def start_game(game)
-    game.start_game()
+  def run_game(game)
     until game.winner()
+      game.player_turn 
       run_round(game)
     end
     clients = find_clients(game)
+    player_num = game.players.index(game.winner())
     clients.each do |client|
-      client.puts("Game Over... Someone won, I have no idea who.")
+      client.puts("Game Over... Player#{player_num} won!")
     end
   end
 

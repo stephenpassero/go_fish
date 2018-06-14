@@ -28,7 +28,15 @@ class Game
     deck.set_cards(arr_of_cards)
   end
 
-  def run_round(fisher, card_rank, target)
+  def run_round(request)
+    new_request = Request.from_json(request)
+    original_fisher = new_request.fisher
+    original_target = new_request.target
+    #Find the actual player objects
+    fisher = players[new_request.fisher[-1].to_i - 1]
+    target = players[new_request.target[-1].to_i - 1]
+
+    card_rank = new_request.rank
     increment_player_turn()
     card = fisher.request_card(fisher, card_rank, target)
     fisher.pair_cards()
@@ -37,6 +45,7 @@ class Game
     elsif target.cards_left == 0
       refill_cards(target)
     end
+    return Response.new(original_fisher, card_rank, original_target, card).to_json
   end
 
   def start_game()
