@@ -106,13 +106,7 @@ describe GoFishServer do
     @server.accept_new_client("Player3")
     game = @server.create_game_if_possible
     request = Request.new("Player1", 8, "Player2").to_json
-    sleep(0.01)
-    # The result of run_round should be a JSON blob
     response = @server.run_round(request, game)
-    expect(response.class).to eq(String)
-    new_response = Response.from_json(response)
-    # The rank should be the same rank as passed in to request
-    expect(new_response.rank).to eq(8)
-    expect(game.player_turn).to eq(2)
+    expect(response.class).to eq(Response)
   end
 end

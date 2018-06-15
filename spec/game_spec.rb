@@ -43,7 +43,7 @@ describe "game" do
     player2_num = 2
     card_num = 5
     request = Request.new("Player1", card_num, "Player2").to_json
-    expect(game.run_round(request).class).to eq(String)
+    expect(game.run_round(request).class).to eq(Response)
   end
 
   it "refills the player's cards" do
