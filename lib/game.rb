@@ -37,15 +37,17 @@ class Game
     target = players[new_request.target[-1].to_i - 1]
 
     card_rank = new_request.rank
-    increment_player_turn()
     card = fisher.request_card(fisher, card_rank, target)
+    if card == false
+      fisher.add_to_hand([deck.play_top_card()])
+    end
     fisher.pair_cards()
     if fisher.cards_left == 0
       refill_cards(fisher)
     elsif target.cards_left == 0
       refill_cards(target)
     end
-    return Response.new(original_fisher, card_rank, original_target, card).to_json
+    return Response.new(original_fisher, card_rank, original_target, card)
   end
 
   def start_game()

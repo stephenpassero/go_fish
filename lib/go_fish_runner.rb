@@ -6,7 +6,8 @@ server.start
 loop do
   server.accept_new_client
   game = server.create_game_if_possible
+  sleep(1)
   if game
-    Thread.new {server.run_game(game)}
+    server.run_game(game)
   end
 end

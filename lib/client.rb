@@ -5,41 +5,83 @@ require 'pry'
 
 
 class Client
-  attr_reader(:name)
+  attr_accessor(:name)
+  attr_reader(:socket)
   def initialize(name)
     @socket = TCPSocket.new("localhost", 3001)
     @name = name
-rescue Errno::ECONNREFUSED
-  puts "Waiting for server to arrive..."
-  sleep(1)
+  end
+
+  def get_output_from_server()
+    return @socket.gets
+  end
+
+  def get_output()
+    answer = gets
+    @socket.puts answer
   end
 
   def prompt_for_input()
     provide_input("Who would you like to ask for what?")
-    provide_input("Example: Ask Player3 for a 9")
+    provide_input("Example: Ask Player3 for a K")
     response = ""
     until response != ""
-      response = capture_output()
+      response = gets
+      sleep(0.001)
     end
+    if response != ""
+      request = convert_to_request(response)
+      return request
+    end
+  end
+
+  def convert_to_request(string)
+    string = string.chomp
     regex = /(player\d).*\s(\w+)$/
-    matches = response.match(regex)
-    target = matches[1]
-    card_rank = matches[2]
-    return request = Request.new(@name, card_rank, target).to_json
+    if string
+      matches = string.match(regex)
+    end
+    if matches
+      if matches == nil
+        return ""
+      else
+        target = matches[1]
+        card_rank = matches[2]
+        return Request.new(@name, card_rank, target)
+      end
+    end
   end
 
   def decipher(response)
     new_response = Response.from_json(response)
     text = ""
-    if new_response.fisher == @name
-      text = "You asked for and took a #{new_response.rank} from #{new_response.target}"
+    if new_response.fisher.downcase == @name.downcase
+      text = "You asked for a #{new_response.rank} from #{new_response.target}"
+      if new_response.card == false
+        new_text = "#{new_response.target} did not have a #{new_response.rank}. Go Fish!"
+      else
+        new_text = "You took a #{new_response.rank} from #{new_response.target}"
+      end
       provide_input(text)
-    elsif new_response.target == @name
-      text = "#{new_response.fisher} asked for and took a #{new_response.rank} from you"
+      provide_input(new_text)
+    elsif new_response.target.downcase == @name.downcase
+      text = "#{new_response.fisher} asked for a #{new_response.rank} from you"
+      if new_response.card == false
+        new_text = "You did not have a #{new_response.rank}. #{new_response.fisher} went fishing."
+      else
+        new_text = "#{new_response.fisher} took a #{new_response.rank} from you"
+      end
       provide_input(text)
+      provide_input(new_text)
     else
-      text = "#{new_response.fisher} asked for and took #{new_response.rank} from #{new_response.target}"
+      text = "#{new_response.fisher} asked for a #{new_response.rank} from #{new_response.target}"
+      if new_response.card == false
+        new_text = "#{new_response.target} did not have a #{new_response.rank}. #{new_response.fisher} went fishing."
+      else
+        new_text = "#{new_response.fisher} took a #{new_response.rank} from #{new_response.target}"
+      end
       provide_input(text)
+      provide_input(new_text)
     end
     return text
   end
@@ -56,6 +98,6 @@ rescue Errno::ECONNREFUSED
   end
 
   def provide_input(text)
-    @socket.puts(text)
+    puts(text)
   end
 end

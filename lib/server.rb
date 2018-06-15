@@ -36,10 +36,6 @@ class GoFishServer
     games_to_clients.values[index_of_game].length
   end
 
-  def num_of_games()
-    games_to_clients.length
-  end
-
   def accept_new_client(player_name = "Random Player")
     client = server.accept_nonblock
     pending_clients.push(client)
@@ -50,10 +46,10 @@ class GoFishServer
       if pending_clients.length == 1
         client.puts("How many people would you like to play with?")
         client_output = ""
-        until client_output != ""
+        until client_output != "" && client_output != "1"
           client_output = capture_output(client)
-          sleep(0.01)
         end
+        client.puts("Waiting for other players...")
         # Use regex to get the number out of the client's output
         num = client_output[/\d/].to_i
         create_game_lobby(num)
@@ -77,8 +73,9 @@ class GoFishServer
     clients.each do |client|
       client_num = clients.index(client)
       player = game.find_player(client_num + 1)
-      player.deck.cards.each do |card|
-        client.puts("Your cards: #{card.to_s}")
+      client.print("Your cards: ")
+      player.deck.cards.each.with_index do |card, index|
+        client.puts("#{card.to_s}")
       end
     end
   end
@@ -105,15 +102,29 @@ class GoFishServer
   end
 
   def run_game(game)
+    game.start_game()
     clients = find_clients(game)
     until game.winner()
+      clients.each do |client|
+        client.puts(game.player_turn)
+        client_num = games_to_clients[game].index(client) + 1
+        player = game.find_player(client_num)
+        client.puts(player.cards_left)
+      end
+      sleep(0.001)
+      tell_clients_their_hand(game)
       client = clients[game.player_turn - 1]
+      client.puts("It's your turn.")
       request = ""
       until request != ""
         request = capture_output(client)
       end
+      response = run_round(request, game)
+      if response.card == false
+        game.increment_player_turn()
+      end
       clients.each do |client|
-        client.puts(run_round(request, game))
+        client.puts(response.to_json)
       end
     end
     # Gets the player number, like 3 or 1
