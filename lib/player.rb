@@ -2,7 +2,7 @@ require_relative("./card_deck")
 require("pry")
 
 class Player
-  attr_reader(:discard_pile, :score, :deck)
+  attr_reader(:discard_pile, :score, :deck, :pairs)
 
   def initialize()
     @deck = CardDeck.new([]);
@@ -47,8 +47,6 @@ class Player
     deck.cards_left
   end
 
-  # To-do: Make it right! Fix the broken encapsulation and self encapsulation
-
   def pair_cards()
     card_holder = []
     deck.cards.each do |card|
@@ -58,10 +56,10 @@ class Player
         end
       end
       if card_holder.length == 4
-        @pairs.push(card_holder)
+        pairs.push(card_holder)
         @score += 1
         card_holder.each do |card|
-          deck.cards.delete(card)
+          deck.delete(card)
         end
       end
       card_holder = []

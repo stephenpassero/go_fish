@@ -30,14 +30,18 @@ class Game
 
   def run_round(request)
     new_request = Request.from_json(request)
-    original_fisher = new_request.fisher
-    original_target = new_request.target
+    original_fisher = new_request.fisher.downcase
+    original_target = new_request.target.downcase
     #Find the actual player objects
     fisher = players[new_request.fisher[-1].to_i - 1]
     target = players[new_request.target[-1].to_i - 1]
 
     card_rank = new_request.rank
-    card = fisher.request_card(fisher, card_rank, target)
+    if card_rank.to_i == 0 # Checks if the card is a face card
+      card = fisher.request_card(fisher, card_rank, target)
+    else
+      card = fisher.request_card(fisher, card_rank.to_i, target)
+    end
     if card == false
       fisher.add_to_hand([deck.play_top_card()])
     end

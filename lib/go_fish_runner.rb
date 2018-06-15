@@ -8,6 +8,6 @@ loop do
   game = server.create_game_if_possible
   sleep(1)
   if game
-    server.run_game(game)
+    Thread.new(server.run_game(game))
   end
 end

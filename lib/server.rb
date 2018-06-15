@@ -105,6 +105,7 @@ class GoFishServer
     game.start_game()
     clients = find_clients(game)
     until game.winner()
+    # Puts the turn number and the number of cards left to each client
       clients.each do |client|
         client.puts(game.player_turn)
         client_num = games_to_clients[game].index(client) + 1

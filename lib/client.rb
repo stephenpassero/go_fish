@@ -16,7 +16,7 @@ class Client
     return @socket.gets
   end
 
-  def get_output()
+  def get_input()
     answer = gets
     @socket.puts answer
   end
