@@ -56,7 +56,7 @@ class Client
     new_response = Response.from_json(response)
     text = ""
     if new_response.fisher.downcase == @name.downcase
-      text = "You asked for a #{new_response.rank} from #{new_response.target}"
+      text = "You asked #{new_response.target} for a #{new_response.rank}"
       if new_response.card == false
         new_text = "#{new_response.target} did not have a #{new_response.rank}. Go Fish!"
       else
@@ -65,7 +65,7 @@ class Client
       provide_input(text)
       provide_input(new_text)
     elsif new_response.target.downcase == @name.downcase
-      text = "#{new_response.fisher} asked for a #{new_response.rank} from you"
+      text = "#{new_response.fisher} asked you for a #{new_response.rank}"
       if new_response.card == false
         new_text = "You did not have a #{new_response.rank}. #{new_response.fisher} went fishing."
       else
@@ -74,7 +74,7 @@ class Client
       provide_input(text)
       provide_input(new_text)
     else
-      text = "#{new_response.fisher} asked for a #{new_response.rank} from #{new_response.target}"
+      text = "#{new_response.fisher} asked #{new_response.target} for a #{new_response.rank}"
       if new_response.card == false
         new_text = "#{new_response.target} did not have a #{new_response.rank}. #{new_response.fisher} went fishing."
       else
@@ -83,7 +83,6 @@ class Client
       provide_input(text)
       provide_input(new_text)
     end
-    return text
   end
 
   def close

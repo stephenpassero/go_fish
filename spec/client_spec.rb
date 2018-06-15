@@ -13,8 +13,8 @@ describe "client" do
     client2 = Client.new("Player2")
     card = Card.new("J", "Spades")
     response = Response.new("Player1", card.rank, "Player2", card).to_json
-    expect(client.decipher(response)).to include("You asked for a J from Player2")
-    expect(client2.decipher(response)).to include("Player1 asked for a J from you")
+    expect(client.decipher(response)).to include("You asked Player2 for a J")
+    expect(client2.decipher(response)).to include("Player1 asked you for a J")
     server.stop
   end
 end

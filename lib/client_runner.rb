@@ -47,7 +47,7 @@ loop do
         request = client.prompt_for_input()
     end
     client.socket.puts(request.to_json)
-    puts client.decipher(client.get_output_from_server)
+    client.decipher(client.get_output_from_server)
   else
     puts "Waiting for the other players to complete their turn..."
     puts client.decipher(client.get_output_from_server)
