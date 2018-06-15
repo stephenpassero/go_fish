@@ -12,7 +12,7 @@ class GoFishServer
   end
 
   def port_number
-    3001
+    3000
   end
 
   def games_to_clients

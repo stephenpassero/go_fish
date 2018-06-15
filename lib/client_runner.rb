@@ -52,4 +52,5 @@ loop do
     puts "Waiting for the other players to complete their turn..."
     puts client.decipher(client.get_output_from_server)
   end
+
 end
