@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'sinatra/reloader'
 
-get('/') do
+get('/static_page') do
   slim(:index)
 end
 
