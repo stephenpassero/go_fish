@@ -5,32 +5,22 @@ html
     link rel="stylesheet" type="text/css" href="css/index.css"
   body
     div.holder
-      div.player_div
-        h2 Player2
-        img src="img/cards/backs_red.png" alt="Red card back"
-        br
-        img.set_card src="img/cards/sj.png" alt="Jack of Spades"
-        img.set_card src="img/cards/s5.png" alt="5 of Spades"
-        img.set_card src="img/cards/sA.png" alt="Ace of Spades"
+      - (@num_of_players.to_i - 1).times do |index|
+          div.player_div
+            h2 ="Player#{index + 2}"
+            img src="img/cards/backs_red.png" alt="Red card back"
+            br
+            img.set_card src="img/cards/sj.png" alt="Jack of Spades"
+            img.set_card src="img/cards/s5.png" alt="5 of Spades"
+            img.set_card src="img/cards/sA.png" alt="Ace of Spades"
 
-      div.player_div
-        h2 Player3
-        img src="img/cards/backs_red.png" alt="Red card back"
-        br
-        img.set_card src="img/cards/s2.png" alt="2 of Spades"
-
-      div.player_div
-        h2 Player4
-        img src="img/cards/backs_red.png" alt="Red card back"
-        br
-        img.set_card src="img/cards/s4.png" alt="4 of Spades"
-        img.set_card src="img/cards/sQ.png" alt="Queen of Spades"
     div.playing_space
       img.deck_card src="img/cards/backs_red.png" alt="Red card back"
       img.deck_card src="img/cards/backs_red.png" alt="Red card back"
       img.deck_card src="img/cards/backs_red.png" alt="Red card back"
       img.deck_card src="img/cards/backs_red.png" alt="Red card back"
       img.deck_card src="img/cards/backs_red.png" alt="Red card back"
+
     div class="human_player"
       h2 You (Player1)
       img src="img/cards/h9.png" alt="9 of Hearts"

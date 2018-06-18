@@ -1,10 +1,12 @@
 require 'sinatra'
 require 'sinatra/reloader'
+require 'pry'
 
-get('/static_page') do
-  slim(:index)
+get('/') do
+  slim(:join)
 end
 
-get('/join') do
-  "Waiting for other players... BE PATIENT!"
+post('/') do
+  @num_of_players = params["num_of_players"]
+  slim(:index)
 end
