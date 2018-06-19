@@ -14,7 +14,7 @@ describe "app", {:type => :feature} do
 
   it 'after the first page should go to a waiting page' do
     visit('/')
-    fill_in('num_of_players', :with => '5')
+    fill_in('name', :with => 'Player1')
     click_on('submit')
     expect(page).to have_content("Waiting for other players...")
   end
@@ -23,11 +23,11 @@ describe "app", {:type => :feature} do
     session1 = Capybara::Session.new(:rack_test, MyApp.new)
     session2 = Capybara::Session.new(:rack_test, MyApp.new)
     session3 = Capybara::Session.new(:rack_test, MyApp.new)
-    [session1, session2, session3].each do |session|
+    [session1, session2, session3].each_with_index do |session, index|
       session.visit('/')
-      session.fill_in('num_of_players', :with => '3')
+      session.fill_in('name', :with => "Player#{index + 1}")
       session.click_on("submit")
     end
-    expect(session2).to have_content("Player2")
+    expect(session3).to have_content("Player3")
   end
 end

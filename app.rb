@@ -7,6 +7,7 @@ require './lib/client.rb'
 Thread.new{require_relative './lib/go_fish_runner.rb'}
 @@clients = []
 @@names = []
+@@counter = 0;
 class MyApp < Sinatra::Base
 
   get('/') do
@@ -15,14 +16,13 @@ class MyApp < Sinatra::Base
 
   get('/waiting') do
     if @@clients.length % 4 == 0
-      redirect("/game")
+      @@counter += 1
+      new_names = @@names.last(4)
+      new_names.reverse!
+      redirect("/game?name=#{new_names[@@counter - 1]}")
     else
       slim(:waiting)
     end
-  end
-
-  post('/waiting') do
-    redirect("/game")
   end
 
   get('/game') do

@@ -1,7 +1,10 @@
 div.holder
+  - name = params['name']
   - 3.times do |index|
       div.player_div
-        h2 ="#{@names[index + 1]}"
+        - new_names = @names.last(4)
+        - new_names.delete(name)
+        h2 ="#{new_names[index]}"
         img src="img/cards/backs_red.png" alt="Red card back"
         br
         img.set_card src="img/cards/sj.png" alt="Jack of Spades"
@@ -16,7 +19,7 @@ div.playing_space
   img.deck_card src="img/cards/backs_red.png" alt="Red card back"
 
 div class="human_player"
-  h2 ="#{@names[0]}"
+  h2 ="#{name}"
   img src="img/cards/h9.png" alt="9 of Hearts"
   img src="img/cards/h3.png" alt="3 of Hearts"
   img src="img/cards/s7.png" alt="7 of Spades"
