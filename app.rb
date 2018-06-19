@@ -3,8 +3,10 @@ require 'sinatra/reloader'
 require 'pry'
 require './lib/server.rb'
 require './lib/client.rb'
+
 Thread.new{require_relative './lib/go_fish_runner.rb'}
-$clients = []
+@@clients = []
+@@names = []
 class MyApp < Sinatra::Base
 
   get('/') do
@@ -12,8 +14,8 @@ class MyApp < Sinatra::Base
   end
 
   get('/waiting') do
-    if $clients.length == $num_of_players.to_i
-      redirect("/game?client_number=#{$player_num}")
+    if @@clients.length % 4 == 0
+      redirect("/game")
     else
       slim(:waiting)
     end
@@ -24,23 +26,22 @@ class MyApp < Sinatra::Base
   end
 
   get('/game') do
-    @num_of_players = $num_of_players
+    @names = @@names
     slim(:index)
   end
 
   post('/') do
-    @num_of_players = params["num_of_players"]
-    $num_of_players = @num_of_players
-    $client = Client.new("Player1")
-    text = $client.get_output_from_server
+    name = params["name"]
+    @@names.push(name)
+    client = Client.new("Player1")
+    text = client.get_output_from_server
     player_num = text.chomp[-1]
-    $player_num = player_num
-    $client.name = "Player#{player_num}"
-    $clients.push($client)
+    client.name = "Player#{player_num}"
+    @@clients.push(client)
     if player_num == "1"
-      $client.socket.puts(@num_of_players)
+      client.socket.puts(4)
     end
-    return redirect("/waiting?client_number=#{player_num}")
+    return redirect("/waiting")
   end
 
 rescue()
