@@ -22,6 +22,8 @@ GEM
     diff-lcs (1.3)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     method_source (0.9.0)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
@@ -82,7 +84,10 @@ PLATFORMS
 DEPENDENCIES
   capybara
   colorize
+  launchy
   pry
+  rack
+  rack-test
   rspec
   sinatra
   sinatra-contrib

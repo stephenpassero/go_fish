@@ -49,7 +49,6 @@ class GoFishServer
         until client_output != "" && client_output != "1"
           client_output = capture_output(client)
         end
-        client.puts("Waiting for other players...")
         # Use regex to get the number out of the client's output
         num = client_output[/\d/].to_i
         create_game_lobby(num)
@@ -57,7 +56,7 @@ class GoFishServer
     end
     # associate player and client
   rescue IO::WaitReadable, Errno::EINTR
-    puts "No client to accept"
+
   end
 
   def create_game_if_possible()
