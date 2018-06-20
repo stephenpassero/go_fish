@@ -30,6 +30,10 @@ class Client
     card_parts.delete('of')
     # Gets the first letters of each item the the array and puts them together in a string
     new_card_string = "#{card_parts[1][0, 1].downcase}#{card_parts[0][0, 1].downcase}"
+    if new_card_string[-1] == "1"
+      new_card_string.insert(2, '0')
+    end
+    return new_card_string
   end
 
   def get_input()

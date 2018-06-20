@@ -1,5 +1,6 @@
 div.holder
-  - name = params['name']
+  - id = params['id'].to_i
+  - name = @names[id - 1]
   - 3.times do |index|
       div.player_div
         - new_names = @names.last(4)
@@ -20,15 +21,16 @@ div.playing_space
 
 div class="human_player"
   h2 ="#{name}"
+  - client = @clients[id - 1]
   - hand = []
-  - turn = @client.get_output_from_server
-  - num_of_cards = @client.get_output_from_server.chomp.to_i
+  - turn = client.get_output_from_server
+  - num_of_cards = client.get_output_from_server.chomp.to_i
   - num_of_cards.times do
-    - hand.push(@client.get_output_from_server.chomp)
-  - @client.convert_deck(hand)
+    - hand.push(client.get_output_from_server.chomp)
+  - client.convert_deck(hand)
   - new_hand = []
   - hand.each do |card|
-    - new_hand.push(@client.convert_card(card))
+    - new_hand.push(client.convert_card(card))
   - new_hand.each do |card|
       img src="img/cards/#{card}.png" alt="card"
   br

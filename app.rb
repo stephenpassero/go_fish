@@ -16,10 +16,7 @@ class MyApp < Sinatra::Base
 
   get('/waiting') do
     if @@clients.length % 4 == 0
-      @@counter += 1
-      new_names = @@names.last(4)
-      new_names.reverse!
-      redirect("/game?name=#{new_names[@@counter - 1]}")
+      redirect("/game?id=#{params["id"]}")
     else
       slim(:waiting)
     end
@@ -27,7 +24,7 @@ class MyApp < Sinatra::Base
 
   get('/game') do
     @names = @@names
-    @client = @@clients.last()
+    @clients = @@clients
     slim(:index)
   end
 
@@ -43,7 +40,7 @@ class MyApp < Sinatra::Base
     if player_num == "1"
       client.socket.puts(4)
     end
-    return redirect("/waiting")
+    return redirect("/waiting?id=#{player_num}")
   end
 
 rescue()
