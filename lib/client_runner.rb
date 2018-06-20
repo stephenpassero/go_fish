@@ -25,7 +25,7 @@ loop do
   end
   puts hand.join(', ')
   hand.each do |card|
-    # Remove the Your Cards: from the first element
+    # Remove the "Your Cards:" from the first element
     if hand.index(card) == 0
       card.slice!(0, 12)
     end

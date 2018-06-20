@@ -15,6 +15,22 @@ class Client
   def get_output_from_server()
     return @socket.gets
   end
+  # To-do - Test this method!
+  def convert_deck(arr_of_cards)
+    arr_of_cards.each do |card|
+      # Remove the "Your Cards:" from the first element
+      if arr_of_cards.index(card) == 0
+        card.slice!(0, 12)
+      end
+    end
+  end
+
+  def convert_card(card_string)
+    card_parts = card_string.split('-')
+    card_parts.delete('of')
+    # Gets the first letters of each item the the array and puts them together in a string
+    new_card_string = "#{card_parts[1][0, 1].downcase}#{card_parts[0][0, 1].downcase}"
+  end
 
   def get_input()
     answer = gets

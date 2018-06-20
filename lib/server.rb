@@ -44,7 +44,6 @@ class GoFishServer
     else
       client.puts("Welcome! Waiting for other players to join... You are Player #{pending_clients.length}")
       if pending_clients.length == 1
-        client.puts("How many people would you like to play with?")
         client_output = ""
         until client_output != "" && client_output != "1"
           client_output = capture_output(client)

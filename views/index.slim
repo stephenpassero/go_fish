@@ -20,12 +20,17 @@ div.playing_space
 
 div class="human_player"
   h2 ="#{name}"
-  img src="img/cards/h9.png" alt="9 of Hearts"
-  img src="img/cards/h3.png" alt="3 of Hearts"
-  img src="img/cards/s7.png" alt="7 of Spades"
-  img src="img/cards/d9.png" alt="9 of Diamonds"
-  img src="img/cards/c9.png" alt="9 of Clubs"
-  img src="img/cards/cK.png" alt="King of Clubs"
+  - hand = []
+  - turn = @client.get_output_from_server
+  - num_of_cards = @client.get_output_from_server.chomp.to_i
+  - num_of_cards.times do
+    - hand.push(@client.get_output_from_server.chomp)
+  - @client.convert_deck(hand)
+  - new_hand = []
+  - hand.each do |card|
+    - new_hand.push(@client.convert_card(card))
+  - new_hand.each do |card|
+      img src="img/cards/#{card}.png" alt="card"
   br
   img.set_card src="img/cards/s6.png" alt="6 of Spades"
   img.set_card src="img/cards/s10.png" alt="10 of Spades"

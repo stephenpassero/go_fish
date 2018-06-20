@@ -27,6 +27,7 @@ class MyApp < Sinatra::Base
 
   get('/game') do
     @names = @@names
+    @client = @@clients.last()
     slim(:index)
   end
 
@@ -37,6 +38,7 @@ class MyApp < Sinatra::Base
     text = client.get_output_from_server
     player_num = text.chomp[-1]
     client.name = "Player#{player_num}"
+    # Set client to a local variable
     @@clients.push(client)
     if player_num == "1"
       client.socket.puts(4)
