@@ -6,11 +6,8 @@ require_relative 'response'
 class Game
   attr_reader(:deck, :players, :player_turn)
 
-  def initialize(num_of_players)
-    @players = []
-    num_of_players.times do
-      @players.push(Player.new())
-    end
+  def initialize()
+    @players = {}
     @player_turn = 1
     @deck = CardDeck.new()
     @deck.shuffle!
@@ -18,7 +15,7 @@ class Game
 
   def deal_cards()
     5.times do
-      players.each do |player|
+      players.values.each do |player|
         player.add_to_hand([deck.play_top_card])
       end
     end
@@ -33,9 +30,8 @@ class Game
     original_fisher = new_request.fisher.downcase
     original_target = new_request.target.downcase
     #Find the actual player objects
-    fisher = players[new_request.fisher[-1].to_i - 1]
-    target = players[new_request.target[-1].to_i - 1]
-
+    fisher = players[new_request.fisher.downcase]
+    target = players[new_request.target.downcase]
     card_rank = new_request.rank
     if card_rank.to_i == 0 # Checks if the card is a face card
       card = fisher.request_card(fisher, card_rank, target)
@@ -44,6 +40,7 @@ class Game
     end
     if card == false
       fisher.add_to_hand([deck.play_top_card()])
+      increment_player_turn()
     end
     fisher.pair_cards()
     if fisher.cards_left == 0
@@ -56,6 +53,12 @@ class Game
 
   def start_game()
     deal_cards()
+  end
+
+  def create_new_player(player_name)
+    player = Player.new(player_name)
+    players[player_name.downcase] = player
+    player
   end
 
   def cards_in_deck()

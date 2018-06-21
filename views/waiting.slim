@@ -1,3 +1,4 @@
+script src="https://js.pusher.com/4.2/pusher.min.js"
 div.wrapper
   h1 Waiting for other players...
 div.spinner
@@ -6,4 +7,11 @@ div.spinner
   div.bounce3
 
 javascript:
-  setTimeout(function(){location.reload()}, 5000)
+  const pusher = new Pusher("a025ff2562d8f55637c7", {
+    cluster: "us2"
+  });
+  const channel = pusher.subscribe('go_fish');
+  channel.bind('game_is_starting', function(data) {
+    console.log(data);
+    window.location.reload();
+  });

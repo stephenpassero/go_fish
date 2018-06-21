@@ -20,18 +20,15 @@ div.playing_space
   img.deck_card src="img/cards/backs_red.png" alt="Red card back"
 
 div class="human_player"
+  - if @player_turn == id
+    h3 It's your turn!
+    form method='post'
+      input name="request" style="font-family: 'Fira Sans', sans-serif; width: 30%; font-size:20px; box-sizing: border-box;" type="text" value="Format: Ask #playername for a #cardrank"
+      input type='submit' style="font-family: 'Fira Sans', sans-serif; font-size: 20px;" value='Submit'
   h2 ="#{name}"
-  - client = @clients[id - 1]
-  - hand = []
-  - turn = client.get_output_from_server
-  - num_of_cards = client.get_output_from_server.chomp.to_i
-  - num_of_cards.times do
-    - hand.push(client.get_output_from_server.chomp)
-  - client.convert_deck(hand)
-  - new_hand = []
+  - player = @players[id - 1]
+  - hand = player.convert_hand()
   - hand.each do |card|
-    - new_hand.push(client.convert_card(card))
-  - new_hand.each do |card|
       img src="img/cards/#{card}.png" alt="card"
   br
   img.set_card src="img/cards/s6.png" alt="6 of Spades"

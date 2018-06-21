@@ -1,21 +1,39 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'pry'
-require './lib/server.rb'
-require './lib/client.rb'
+require './lib/game'
+require './lib/player'
+require 'pusher'
+require './lib/request'
 
-Thread.new{require_relative './lib/go_fish_runner.rb'}
-@@clients = []
+@@game = Game.new()
+@@players = []
 @@names = []
 @@counter = 0;
 class MyApp < Sinatra::Base
+
+  def pusher_client()
+    @pusher_client ||= Pusher::Client.new(
+      app_id: '546993',
+      key: 'a025ff2562d8f55637c7',
+      secret: '294587b746ab86785395',
+      cluster: 'us2'
+    )
+  end
 
   get('/') do
     slim(:join)
   end
 
   get('/waiting') do
-    if @@clients.length % 4 == 0
+    # Change this to accomodate for more than 1 game
+    if @@players.length == 4
+      # Only do this once
+      if @@counter == 0
+        @@game.deal_cards()
+        pusher_client.trigger("go_fish", "game_is_starting", {message: "All players have joined."})
+        @@counter += 1
+      end
       redirect("/game?id=#{params["id"]}")
     else
       slim(:waiting)
@@ -24,22 +42,30 @@ class MyApp < Sinatra::Base
 
   get('/game') do
     @names = @@names
-    @clients = @@clients
+    @players = @@players
+    @player_turn = @@game.player_turn
     slim(:index)
+  end
+
+  post('/game') do
+    regex = /ask\s(\w+).*\s(\w{2}|\w{1})/i
+    string = params['request']
+    name = @@names[params['id'].to_i - 1]
+    matches = string.match(regex)
+    target = matches[1]
+    card_rank = matches[2]
+    request = Request.new(name, card_rank, target)
+    @@game.run_round(request.to_json)
+    return redirect("/game?id=#{params['id'].to_i}")
   end
 
   post('/') do
     name = params["name"]
     @@names.push(name)
-    client = Client.new("Player1")
-    text = client.get_output_from_server
-    player_num = text.chomp[-1]
-    client.name = "Player#{player_num}"
-    # Set client to a local variable
-    @@clients.push(client)
-    if player_num == "1"
-      client.socket.puts(4)
-    end
+    player = @@game.create_new_player(name)
+    @@players.push(player)
+    # Will need to change the player num to allow for multiple games
+    player_num = @@players.length
     return redirect("/waiting?id=#{player_num}")
   end
 

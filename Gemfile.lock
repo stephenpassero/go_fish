@@ -20,6 +20,7 @@ GEM
     colorize (0.8.1)
     concurrent-ruby (1.0.5)
     diff-lcs (1.3)
+    httpclient (2.8.3)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
     launchy (2.4.3)
@@ -36,6 +37,11 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (3.0.2)
+    pusher (1.3.1)
+      httpclient (~> 2.7)
+      multi_json (~> 1.0)
+      pusher-signature (~> 0.1.8)
+    pusher-signature (0.1.8)
     rack (2.0.5)
     rack-protection (2.0.3)
       rack
@@ -86,6 +92,7 @@ DEPENDENCIES
   colorize
   launchy
   pry
+  pusher
   rack
   rack-test
   rspec

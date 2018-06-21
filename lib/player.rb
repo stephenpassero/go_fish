@@ -2,12 +2,13 @@ require_relative("./card_deck")
 require("pry")
 
 class Player
-  attr_reader(:discard_pile, :score, :deck, :pairs)
+  attr_reader(:discard_pile, :score, :deck, :pairs, :name)
 
-  def initialize()
+  def initialize(name)
     @deck = CardDeck.new([]);
     @score = 0
     @pairs = []
+    @name = name
   end
 
   def play_top_card()
@@ -16,6 +17,18 @@ class Player
 
   def set_score(num)
     @score = num
+  end
+
+  def convert_hand()
+    cards = []
+    deck.cards.each do |card_obj|
+      card_str = ("#{card_obj.suit[0, 1].downcase}#{card_obj.rank.to_s.downcase}")
+      if card_str[-1] == "1"
+        card_str.insert(2, '0')
+      end
+      cards.push(card_str)
+    end
+    return cards
   end
 
   def remove_card(card)
