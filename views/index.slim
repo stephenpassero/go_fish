@@ -23,7 +23,7 @@ div class="human_player"
   - if @player_turn == id
     h3 It's your turn!
     form method='post'
-      input name="request" style="font-family: 'Fira Sans', sans-serif; width: 30%; font-size:20px; box-sizing: border-box;" type="text" value="Format: Ask #playername for a #cardrank"
+      input.request name="request" type="text" placeholder="Format: Ask #playername for a #cardrank"
       input type='submit' style="font-family: 'Fira Sans', sans-serif; font-size: 20px;" value='Submit'
   h2 ="#{name}"
   - player = @players[id - 1]
@@ -33,3 +33,12 @@ div class="human_player"
   br
   img.set_card src="img/cards/s6.png" alt="6 of Spades"
   img.set_card src="img/cards/s10.png" alt="10 of Spades"
+
+javascript:
+  const pusher = new Pusher("a025ff2562d8f55637c7", {
+    cluster: "us2"
+  });
+  const channel = pusher.subscribe('go_fish');
+  channel.bind('game_changed', function(data) {
+    window.location.reload();
+  });

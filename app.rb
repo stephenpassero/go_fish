@@ -56,7 +56,8 @@ class MyApp < Sinatra::Base
     card_rank = matches[2]
     request = Request.new(name, card_rank, target)
     @@game.run_round(request.to_json)
-    return redirect("/game?id=#{params['id'].to_i}")
+    pusher_client.trigger("go_fish", "game_changed", {message: "A player completed his turn"})
+    redirect("/game?id=#{params['id'].to_i}")
   end
 
   post('/') do

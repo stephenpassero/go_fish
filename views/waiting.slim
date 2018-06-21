@@ -1,4 +1,3 @@
-script src="https://js.pusher.com/4.2/pusher.min.js"
 div.wrapper
   h1 Waiting for other players...
 div.spinner
@@ -12,6 +11,5 @@ javascript:
   });
   const channel = pusher.subscribe('go_fish');
   channel.bind('game_is_starting', function(data) {
-    console.log(data);
     window.location.reload();
   });

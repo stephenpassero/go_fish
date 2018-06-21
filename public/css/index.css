@@ -53,6 +53,13 @@ input {
   text-align:center;
 }
 
+.request {
+  font-family: 'Fira Sans', sans-serif;
+  width: 30%;
+  font-size:20px; 
+  box-sizing: border-box;
+}
+
 .spinner {
   margin: 30px auto 0;
   width: 70px;
