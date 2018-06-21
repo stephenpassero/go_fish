@@ -31,9 +31,15 @@ div class="human_player"
   - hand.each do |card|
       img src="img/cards/#{card}.png" alt="card"
   br
-  img.set_card src="img/cards/s6.png" alt="6 of Spades"
-  img.set_card src="img/cards/s10.png" alt="10 of Spades"
-
+  div style="margin: 0 auto;"
+    img.set_card src="img/cards/s6.png" alt="6 of Spades"
+    img.set_card src="img/cards/s10.png" alt="10 of Spades"
+  div.history
+    p =@responses[0] || ""
+    p =@responses[1] || ""
+    p =@responses[2] || ""
+    p =@responses[3] || ""
+    p =@responses[4] || ""
 javascript:
   const pusher = new Pusher("a025ff2562d8f55637c7", {
     cluster: "us2"

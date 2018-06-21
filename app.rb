@@ -9,8 +9,13 @@ require './lib/request'
 @@game = Game.new()
 @@players = []
 @@names = []
-@@counter = 0;
+@@counter = 0
+@@responses = []
 class MyApp < Sinatra::Base
+
+  configure :development do
+    register Sinatra::Reloader
+  end
 
   def pusher_client()
     @pusher_client ||= Pusher::Client.new(
@@ -44,6 +49,7 @@ class MyApp < Sinatra::Base
     @names = @@names
     @players = @@players
     @player_turn = @@game.player_turn
+    @responses = @@responses
     slim(:index)
   end
 
@@ -55,7 +61,15 @@ class MyApp < Sinatra::Base
     target = matches[1]
     card_rank = matches[2]
     request = Request.new(name, card_rank, target)
-    @@game.run_round(request.to_json)
+    response = @@game.run_round(request.to_json)
+    if response.card == false
+      @@responses.push("#{response.fisher} asked #{response.target} for a #{response.rank}")
+    else
+      @@responses.push("#{response.fisher} took a #{response.rank} from #{response.target}")
+    end
+    if @@responses.length > 5
+      @@responses.shift()
+    end
     pusher_client.trigger("go_fish", "game_changed", {message: "A player completed his turn"})
     redirect("/game?id=#{params['id'].to_i}")
   end
