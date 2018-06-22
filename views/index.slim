@@ -4,6 +4,7 @@ div.holder
   - current_player = @players[id - 1]
   - 3.times do |index|
       div.player_div
+        / Do this in app
         - last_four_names = @names.last(4)
         - last_four_players = @players.last(4)
         - last_four_names.delete(name)

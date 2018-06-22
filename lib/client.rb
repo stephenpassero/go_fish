@@ -103,6 +103,8 @@ class Client
       provide_input(text)
       provide_input(new_text)
     end
+    return text
+    return new_text
   end
 
   def close

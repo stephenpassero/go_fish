@@ -77,7 +77,7 @@ class Game
     running_winner = nil
     if deck.cards_left == 0 && cards_left_in_play? == false
       points = 0
-      players.each do |player|
+      players.values.each do |player|
         if player.score > points
           running_winner = player
           points = player.score
@@ -89,7 +89,7 @@ class Game
 
   def cards_left_in_play?()
     players_out_of_cards = true
-    players.each do |player|
+    players.values.each do |player|
       if player.cards_left == 0
         players_out_of_cards = false
       end
@@ -102,7 +102,7 @@ class Game
   end
 
   def find_player(player_num)
-    players[player_num - 1]
+    @players.values[player_num - 1]
   end
 
   def player_cards_left(player)

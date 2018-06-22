@@ -2,8 +2,8 @@ require 'rspec'
 require 'response'
 
 describe "response" do
-  let(:player1) {Player.new()}
-  let(:player2) {Player.new()}
+  let(:player1) {Player.new("Player1")}
+  let(:player2) {Player.new("Player2")}
   let(:card) {Card.new(6, "Diamonds")}
 
   it "should have a card attribute" do

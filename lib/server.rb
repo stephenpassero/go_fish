@@ -60,7 +60,10 @@ class GoFishServer
 
   def create_game_if_possible()
     if pending_clients.length == num_of_players
-      game = Game.new(num_of_players)
+      game = Game.new()
+      num_of_players.times do |index|
+        game.create_new_player("Player#{index + 1}")
+      end
       games_to_clients.store(game, pending_clients.shift(num_of_players))
       return game
     end

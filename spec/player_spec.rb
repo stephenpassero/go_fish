@@ -3,13 +3,13 @@ require_relative("../lib/player")
 
 describe("#player") do
   it("should have a deck of cards") do
-    player = Player.new()
+    player = Player.new("Player1")
     expect(player.deck).not_to eq(nil)
   end
 
   it "should give its card to the other player who asked for it" do
-    player1 = Player.new()
-    player2 = Player.new()
+    player1 = Player.new("Player1")
+    player2 = Player.new("Player2")
     card1 = Card.new("A", "Clubs")
     card2 = Card.new(4, "Hearts")
     card3 = Card.new(7, "Spades")
@@ -21,8 +21,8 @@ describe("#player") do
   end
 
   it "should be able to pair four cards" do
-    player1 = Player.new()
-    player2 = Player.new()
+    player1 = Player.new("Player1")
+    player2 = Player.new("Player2")
     card1 = Card.new("A", "Clubs")
     card2 = Card.new("A", "Hearts")
     card3 = Card.new("A", "Diamonds")

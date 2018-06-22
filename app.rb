@@ -54,6 +54,7 @@ class MyApp < Sinatra::Base
   end
 
   post('/game') do
+    # Pull some of this out into a request_validator object or something
     regex = /ask\s(\w+).*\s(\w{2}|\w{1})/i
     string = params['request']
     name = @@names[params['id'].to_i - 1]

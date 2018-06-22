@@ -19,7 +19,7 @@ describe "client" do
   end
 
   it "should be able to convert the name of a card" do
-    client = client = Client.new("Player1")
+    client = Client.new("Player1")
     expect(client.convert_card("7-of-clubs")).to eq("c7")
     expect(client.convert_card("J-of-Diamonds")).to eq("dj")
   end

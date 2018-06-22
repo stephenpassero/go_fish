@@ -4,8 +4,6 @@ require 'request'
 require 'json'
 
 describe "request" do
-  # let(:player1) {Player.new()}
-  # let(:player2) {Player.new()}
   let(:card) {Card.new(6, "Diamonds")}
 
   it "should have a card attribute" do

@@ -7,35 +7,43 @@ require 'response'
 
 describe "game" do
   it "creates a deck" do
-    num_of_players = 1
-    game = Game.new(1)
+    game = Game.new()
+    game.create_new_player("Player1")
     expect(game.deck).not_to eq(nil)
   end
 
   it "should give the the number representing the player's turn" do
-    num_of_players = 2
-    game = Game.new(num_of_players)
+    game = Game.new()
+    2.times do |index|
+      game.create_new_player("Player#{index + 1}")
+    end
     expect(game.player_turn).to eq(1)
     game.increment_player_turn
     expect(game.player_turn).to eq(2)
   end
 
   it "#run_game should be able to distribute five cards to each player" do
-    # The number 4 is how many players are being created
-    game = Game.new(4)
+    game = Game.new()
+    4.times do |index|
+      game.create_new_player("Player#{index + 1}")
+    end
     # Give five cards to each player. 5 x 4 = 20. A full deck, 52 cards, minus 20 cards = 32
     game.deal_cards()
     expect(game.cards_in_deck).to eq(32)
   end
 
-  let(:game) {Game.new(2)}
-  let(:player1) {game.find_player(1)}
-  let(:player2) {game.find_player(2)}
+  let(:game) {Game.new()}
   let(:card1) {Card.new(5, "Hearts")}
   let(:card2) {Card.new(5, "Spades")}
   let(:card3) {Card.new(5, "Diamonds")}
   let(:card4) {Card.new(5, "Clubs")}
-
+  before :each do
+    2.times do |index|
+      game.create_new_player("Player#{index + 1}")
+    end
+  end
+  let(:player1) {game.find_player(1)}
+  let(:player2) {game.find_player(2)}
   it "should run a round and return a json response object" do
     player1.set_hand(card1, card2)
     player2.set_hand(card3, card4)

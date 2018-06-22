@@ -76,7 +76,7 @@ describe GoFishServer do
     client1.provide_input("2")
     @server.accept_new_client("Player 1")
     @server.accept_new_client("Player 2")
-    expect(client1.capture_output()).to include("How many people would you like to play with?")
+    expect(client1.capture_output()).to eq("Welcome! Waiting for other players to join... You are Player 1\n")
     expect(client2.capture_output).to eq("Welcome! The the game will begin shortly. You are Player 2\n")
   end
 
