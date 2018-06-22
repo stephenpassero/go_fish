@@ -67,7 +67,7 @@ class MyApp < Sinatra::Base
     if card_rank.to_i != 0
       card_rank = card_rank.to_i
     end
-    if target == name || player.card_in_hand(card_rank) == false
+    if target == name || player.card_in_hand(card_rank) == false || !@@names.include?(target)
       redirect("/game?id=#{params['id'].to_i}")
     end
     request = Request.new(name, card_rank, target)
