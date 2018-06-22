@@ -5,12 +5,14 @@ require './lib/game'
 require './lib/player'
 require 'pusher'
 require './lib/request'
+require './lib/request_validator'
 
 @@game = Game.new()
 @@players = []
 @@names = []
 @@counter = 0
 @@responses = []
+@@should_reload = false
 class MyApp < Sinatra::Base
 
   configure :development do
@@ -50,23 +52,42 @@ class MyApp < Sinatra::Base
     @players = @@players
     @player_turn = @@game.player_turn
     @responses = @@responses
+    @cards_in_deck = @@game.cards_in_deck()
+    @should_reload = @@should_reload
     slim(:index)
   end
 
-  post('/game') do
-    # Pull some of this out into a request_validator object or something
-    string = params['request']
-    name = @@names[params['id'].to_i - 1]
+  get('/game_over') do
+    @players = @@players
+    slim(:game_over)
+  end
 
-    request = Request.new(name, card_rank, target)
-    response = @@game.run_round(request.to_json)
-    if response.card == false
-      @@responses.push("#{response.fisher} asked #{response.target} for a #{response.rank}")
-    else
-      @@responses.push("#{response.fisher} took a #{response.rank} from #{response.target}")
+  post('/game') do
+    if @@game.cards_left_in_play? == false
+      redirect("/game_over")
     end
-    if @@responses.length > 5
-      @@responses.shift()
+    request_validator = RequestValidator.new(@@game)
+    string = params['request']
+    current_player_name = @@names[params['id'].to_i - 1]
+    arr = request_validator.validate(string, current_player_name, @@names)
+    if arr == false
+      @@should_reload = true
+      redirect("/game?id=#{params['id'].to_i}")
+    end
+    target = arr[0]
+    card_rank = arr[1]
+    request = Request.new(current_player_name, card_rank, target)
+    response = @@game.run_round(request.to_json)
+    @@should_reload = false
+    if response != ""
+      if response.card == false
+        @@responses.push("#{response.fisher} asked #{response.target} for a #{response.rank}")
+      else
+        @@responses.push("#{response.fisher} took a #{response.rank} from #{response.target}")
+      end
+      if @@responses.length > 5
+        @@responses.shift()
+      end
     end
     pusher_client.trigger("go_fish", "game_changed", {message: "A player completed his turn"})
     redirect("/game?id=#{params['id'].to_i}")

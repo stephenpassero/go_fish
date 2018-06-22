@@ -27,28 +27,33 @@ class Game
 
   def run_round(request)
     new_request = Request.from_json(request)
-    original_fisher = new_request.fisher.downcase
-    original_target = new_request.target.downcase
-    #Find the actual player objects
-    fisher = players[new_request.fisher.downcase]
-    target = players[new_request.target.downcase]
-    card_rank = new_request.rank
-    if card_rank.to_i == 0 # Checks if the card is a face card
-      card = fisher.request_card(fisher, card_rank, target)
-    else
-      card = fisher.request_card(fisher, card_rank.to_i, target)
-    end
-    if card == false
-      fisher.add_to_hand([deck.play_top_card()])
+    if new_request.rank == ""
       increment_player_turn()
+      return ""
+    else
+      original_fisher = new_request.fisher.downcase
+      original_target = new_request.target.downcase
+      #Find the actual player objects
+      fisher = players[new_request.fisher.downcase]
+      target = players[new_request.target.downcase]
+      card_rank = new_request.rank
+      if card_rank.to_i == 0 # Checks if the card is a face card
+        card = fisher.request_card(fisher, card_rank, target)
+      else
+        card = fisher.request_card(fisher, card_rank.to_i, target)
+      end
+      if card == false
+        fisher.add_to_hand([deck.play_top_card()])
+        increment_player_turn()
+      end
+      fisher.pair_cards()
+      if fisher.cards_left == 0
+        refill_cards(fisher)
+      elsif target.cards_left == 0
+        refill_cards(target)
+      end
+      return Response.new(original_fisher, card_rank, original_target, card)
     end
-    fisher.pair_cards()
-    if fisher.cards_left == 0
-      refill_cards(fisher)
-    elsif target.cards_left == 0
-      refill_cards(target)
-    end
-    return Response.new(original_fisher, card_rank, original_target, card)
   end
 
   def start_game()

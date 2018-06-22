@@ -17,11 +17,12 @@ div.holder
           img.set_card src="img/cards/s#{card.rank}.png" alt="card"
 
 div.playing_space
-  img.deck_card src="img/cards/backs_red.png" alt="Red card back"
-  img.deck_card src="img/cards/backs_red.png" alt="Red card back"
-  img.deck_card src="img/cards/backs_red.png" alt="Red card back"
-  img.deck_card src="img/cards/backs_red.png" alt="Red card back"
-  img.deck_card src="img/cards/backs_red.png" alt="Red card back"
+  - if @cards_in_deck > 0
+    img.deck_card src="img/cards/backs_red.png" alt="Red card back"
+    img.deck_card src="img/cards/backs_red.png" alt="Red card back"
+    img.deck_card src="img/cards/backs_red.png" alt="Red card back"
+    img.deck_card src="img/cards/backs_red.png" alt="Red card back"
+    img.deck_card src="img/cards/backs_red.png" alt="Red card back"
 
 div class="human_player"
   - if @player_turn == id
@@ -45,6 +46,9 @@ div class="human_player"
     p =@responses[3] || ""
     p =@responses[4] || ""
 javascript:
+  if(#{@should_reload} == true){
+    alert("Invalid request format! Remember, you must ask for a card in your hand.")
+  }
   const pusher = new Pusher("a025ff2562d8f55637c7", {
     cluster: "us2"
   });
