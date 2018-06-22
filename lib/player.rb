@@ -69,7 +69,7 @@ class Player
         end
       end
       if card_holder.length == 4
-        pairs.push(card_holder)
+        pairs.push(card_holder[0])
         @score += 1
         card_holder.each do |card|
           deck.delete(card)

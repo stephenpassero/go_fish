@@ -1,16 +1,19 @@
 div.holder
   - id = params['id'].to_i
   - name = @names[id - 1]
+  - current_player = @players[id - 1]
   - 3.times do |index|
       div.player_div
-        - new_names = @names.last(4)
-        - new_names.delete(name)
-        h2 ="#{new_names[index]}"
+        - last_four_names = @names.last(4)
+        - last_four_players = @players.last(4)
+        - last_four_names.delete(name)
+        - last_four_players.delete(current_player)
+        - player = last_four_players[index]
+        h2 ="#{last_four_names[index]}"
         img src="img/cards/backs_red.png" alt="Red card back"
         br
-        img.set_card src="img/cards/sj.png" alt="Jack of Spades"
-        img.set_card src="img/cards/s5.png" alt="5 of Spades"
-        img.set_card src="img/cards/sA.png" alt="Ace of Spades"
+        - player.pairs.each do |card|
+          img.set_card src="img/cards/s#{card.rank}.png" alt="card"
 
 div.playing_space
   img.deck_card src="img/cards/backs_red.png" alt="Red card back"
@@ -32,8 +35,8 @@ div class="human_player"
       img src="img/cards/#{card}.png" alt="card"
   br
   div style="margin: 0 auto;"
-    img.set_card src="img/cards/s6.png" alt="6 of Spades"
-    img.set_card src="img/cards/s10.png" alt="10 of Spades"
+    - player.pairs.each do |card|
+      img.set_card src="img/cards/s#{card.rank}.png" alt="card"
   div.history
     p =@responses[0] || ""
     p =@responses[1] || ""

@@ -32,7 +32,7 @@ class MyApp < Sinatra::Base
 
   get('/waiting') do
     # Change this to accomodate for more than 1 game
-    if @@players.length == 4
+    if @@players.length % 4 == 0
       # Only do this once
       if @@counter == 0
         @@game.deal_cards()
@@ -58,8 +58,18 @@ class MyApp < Sinatra::Base
     string = params['request']
     name = @@names[params['id'].to_i - 1]
     matches = string.match(regex)
+    if matches == nil
+      redirect("/game?id=#{params['id'].to_i}")
+    end
     target = matches[1]
     card_rank = matches[2]
+    player = @@players[params['id'].to_i - 1]
+    if card_rank.to_i != 0
+      card_rank = card_rank.to_i
+    end
+    if target == name || player.card_in_hand(card_rank) == false
+      redirect("/game?id=#{params['id'].to_i}")
+    end
     request = Request.new(name, card_rank, target)
     response = @@game.run_round(request.to_json)
     if response.card == false
