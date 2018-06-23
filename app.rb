@@ -33,7 +33,6 @@ class MyApp < Sinatra::Base
   end
 
   get('/waiting') do
-    # Change this to accomodate for more than 1 game
     if @@players.length % 4 == 0
       # Only do this once
       if @@counter == 0
@@ -64,7 +63,7 @@ class MyApp < Sinatra::Base
 
   post('/game') do
     if @@game.cards_left_in_play? == false
-      redirect("/game_over")
+      pusher_client.trigger("go_fish", "game_over", {message: "The game has ended"})
     end
     request_validator = RequestValidator.new(@@game)
     string = params['request']
@@ -98,7 +97,6 @@ class MyApp < Sinatra::Base
     @@names.push(name)
     player = @@game.create_new_player(name)
     @@players.push(player)
-    # Will need to change the player num to allow for multiple games
     player_num = @@players.length
     return redirect("/waiting?id=#{player_num}")
   end

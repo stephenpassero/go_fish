@@ -1,1 +1,24 @@
-h1 Game over!
+- winners = []
+- most_books = 0
+- winner_string = ""
+- @players.each do |player|
+  - if player.score > most_books
+    - most_books = player.score
+    - winners.clear
+    - winners.push(player)
+  - elsif player.score == most_books
+    - winners.push(player)
+div style="text-align: center;"
+  h1 Game over!
+  - if winners.length == 1
+    h2 ="#{winners[0].name} won!"
+  - else
+    - # Formats the winner string like this: "Player1, Player2, and player3 tied..."
+    - winners.each do |player|
+      - if winners.index(player) == winners.length - 2
+        - winner_string.concat("#{player.name}, and")
+      - elsif winners.index(player) == winners.length - 1
+        - winner_string.concat("#{player.name} tied...")
+      - else
+        - winner_string.concat("#{player.name},")
+  h2 =winner_string

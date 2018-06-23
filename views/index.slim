@@ -56,3 +56,7 @@ javascript:
   channel.bind('game_changed', function(data) {
     window.location.reload();
   });
+
+  channel.bind('game_over', function(data) {
+    window.location.replace("/game_over");
+  });

@@ -64,8 +64,10 @@ class Player
     card_holder = []
     deck.cards.each do |card|
       deck.cards.each do |card1|
-        if card.rank == card1.rank
+        if card && card1
+          if card.rank == card1.rank
           card_holder.push(card1)
+          end
         end
       end
       if card_holder.length == 4

@@ -43,7 +43,9 @@ class Game
         card = fisher.request_card(fisher, card_rank.to_i, target)
       end
       if card == false
-        fisher.add_to_hand([deck.play_top_card()])
+        if deck.cards_left >= 1
+          fisher.add_to_hand([deck.play_top_card()])
+        end
         increment_player_turn()
       end
       fisher.pair_cards()
@@ -93,10 +95,10 @@ class Game
   end
 
   def cards_left_in_play?()
-    players_out_of_cards = true
+    players_out_of_cards = false
     players.values.each do |player|
-      if player.cards_left == 0
-        players_out_of_cards = false
+      if player.cards_left > 0
+        players_out_of_cards = true
       end
     end
     players_out_of_cards
