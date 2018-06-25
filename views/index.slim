@@ -4,13 +4,10 @@ div.holder
   - current_player = @players[id - 1]
   - 3.times do |index|
       div.player_div
-        / Do this in app
-        - last_four_names = @names.last(4)
-        - last_four_players = @players.last(4)
-        - last_four_names.delete(name)
-        - last_four_players.delete(current_player)
-        - player = last_four_players[index]
-        h2 ="#{last_four_names[index]}"
+        - @last_four_names.delete(name)
+        - @last_four_players.delete(current_player)
+        - player = @last_four_players[index]
+        h2 ="#{@last_four_names[index]}"
         img src="img/cards/backs_red.png" alt="Red card back"
         br
         - player.pairs.each do |card|
@@ -40,11 +37,11 @@ div class="human_player"
     - player.pairs.each do |card|
       img.set_card src="img/cards/s#{card.rank}.png" alt="card"
   div.history
-    p =@responses[0] || ""
-    p =@responses[1] || ""
-    p =@responses[2] || ""
-    p =@responses[3] || ""
-    p =@responses[4] || ""
+      p =@responses[0] || ""
+      p =@responses[1] || ""
+      p =@responses[2] || ""
+      p =@responses[3] || ""
+      p =@responses[4] || ""
 javascript:
   if(#{@should_reload} == true){
     alert("Invalid request format! Remember, you must ask for a card in your hand.")

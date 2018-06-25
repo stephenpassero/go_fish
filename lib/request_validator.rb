@@ -18,7 +18,7 @@ class RequestValidator
       end
       target = matches[1]
       card_rank = matches[2]
-      player = game.find_player(fisher[-1].to_i) # Gets the actual player object
+      player = game.find_player(fisher) # Gets the actual player object
       if card_rank.to_i != 0 # Changes the card rank to an integer if it isn't a face card
         card_rank = card_rank.to_i
       end

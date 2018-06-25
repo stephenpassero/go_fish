@@ -2,5 +2,5 @@ div.wrapper
   h1 Welcome to Go Fish!
   form method='post'
     h3 Type in your name:
-    input name="name" type="text" required=""
+    input name="name" type="text" required="" onkeydown="return (event.keyCode!=32);"
     input type='submit' value='Submit'

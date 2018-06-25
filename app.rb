@@ -4,6 +4,7 @@ require 'pry'
 require './lib/game'
 require './lib/player'
 require 'pusher'
+require './lib/card_deck'
 require './lib/request'
 require './lib/request_validator'
 
@@ -47,6 +48,8 @@ class MyApp < Sinatra::Base
   end
 
   get('/game') do
+    @last_four_names = @@names.last(4)
+    @last_four_players = @@players.last(4)
     @names = @@names
     @players = @@players
     @player_turn = @@game.player_turn
@@ -57,7 +60,8 @@ class MyApp < Sinatra::Base
   end
 
   get('/game_over') do
-    @players = @@players
+    @game = @@game
+    @deck = CardDeck.new()
     slim(:game_over)
   end
 

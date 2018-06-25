@@ -51,7 +51,8 @@ class Game
       fisher.pair_cards()
       if fisher.cards_left == 0
         refill_cards(fisher)
-      elsif target.cards_left == 0
+      end
+      if target.cards_left == 0
         refill_cards(target)
       end
       return Response.new(original_fisher, card_rank, original_target, card)
@@ -108,8 +109,8 @@ class Game
     players[player_num - 1].set_hand(cards)
   end
 
-  def find_player(player_num)
-    @players.values[player_num - 1]
+  def find_player(player_name)
+    @players[player_name.downcase]
   end
 
   def player_cards_left(player)

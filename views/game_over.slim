@@ -1,13 +1,18 @@
 - winners = []
 - most_books = 0
 - winner_string = ""
-- @players.each do |player|
+- @game.players.each do |player|
   - if player.score > most_books
     - most_books = player.score
     - winners.clear
     - winners.push(player)
   - elsif player.score == most_books
     - winners.push(player)
+/ Reset the game
+- @game.players = {}
+- @game.deck = @deck
+- @game.deck.shuffle!
+
 div style="text-align: center;"
   h1 Game over!
   - if winners.length == 1
