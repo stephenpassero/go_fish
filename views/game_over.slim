@@ -18,7 +18,7 @@ div style="text-align: center;"
   - if winners.length == 1
     h2 ="#{winners[0].name} won!"
   - else
-    - # Formats the winner string like this: "Player1, Player2, and player3 tied..."
+    - # Formats the winner string like this: "Player1, Player2, and Player3 tied..."
     - winners.each do |player|
       - if winners.index(player) == winners.length - 2
         - winner_string.concat("#{player.name}, and")
