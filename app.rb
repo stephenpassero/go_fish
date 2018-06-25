@@ -84,7 +84,7 @@ class MyApp < Sinatra::Base
     @@should_reload = false
     if response != ""
       if response.card == false
-        @@responses.push("#{response.fisher} asked #{response.target} for a #{response.rank}")
+        @@responses.push("#{response.fisher} asked #{response.target} for a #{response.rank}. Go Fish!")
       else
         @@responses.push("#{response.fisher} took a #{response.rank} from #{response.target}")
       end
